@@ -16,21 +16,16 @@ task main()
 {
 	bFloatDuringInactiveMotorPWM = false;
 
-	int x2, y1;
+	int leftRight, forwardBack;
 	while (true)
 	{
 		getJoystickSettings(joystick);
-		x2 = -joystick.joy1_x2 * 80/128;
-		y1 = joystick.joy1_y1 * 80/128;
-		if (abs(x2) > abs(y1) && abs(x2) > 15)
+		leftRight = joystick.joy1_x2 * 80/128;
+		forwardBack = -joystick.joy1_y1 * 80/128;
+		if (abs(forwardBack) > 15 || abs(leftRight) > 15)
 		{
-			motor[leftMotor] = x2;
-			motor[rightMotor] = x2;
-		}
-		else if (abs(y1) > 15)
-		{
-			motor[leftMotor] = -y1;
-			motor[rightMotor] = y1;
+			motor[leftMotor] = forwardBack+leftRight;
+			motor[rightMotor] = forwardBack-leftRight;
 		}
 		else
 		{
