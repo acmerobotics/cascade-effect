@@ -1,4 +1,4 @@
-#pragma config(Hubs,  S1, HTMotor,  HTServo,  none,     none)
+pragma config(Hubs,  S1, HTMotor,  HTServo,  none,     none)
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Motor,  mtr_S1_C1_1,     rightMotor,    tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C1_2,     leftMotor,     tmotorTetrix, openLoop)
@@ -22,7 +22,7 @@ task main()
 		getJoystickSettings(joystick);
 		leftRight = joystick.joy1_x2 * 80/128;
 		forwardBack = -joystick.joy1_y1 * 80/128;
-		if abs(forwardBack) > 15 || abs(leftRight) > 15
+		if forwardBack =! 0 || leftRight =! 0
 		{
 			motor[leftMotor] = forwardBack+leftRight;
 			motor[rightMotor] = forwardBack-leftRight;
