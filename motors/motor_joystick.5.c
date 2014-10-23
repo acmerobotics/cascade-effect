@@ -22,7 +22,7 @@ task main()
 		getJoystickSettings(joystick);
 		leftRight = joystick.joy1_x2 * 80/128;
 		forwardBack = -joystick.joy1_y1 * 80/128;
-		if abs(forwardBack) > 15 || abs(leftRight) > 15
+		if (abs(forwardBack) > 15 || abs(leftRight) > 15)
 		{
 			motor[leftMotor] = forwardBack+leftRight;
 			motor[rightMotor] = forwardBack-leftRight;
