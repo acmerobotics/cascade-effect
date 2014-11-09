@@ -1,7 +1,7 @@
 #pragma config(Hubs,  S1, HTServo,  HTMotor,  none,     none)
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
-#pragma config(Motor,  mtr_S1_C2_1,     leftMotor,     tmotorTetrix, PIDControl, encoder)
-#pragma config(Motor,  mtr_S1_C2_2,     rightMotor,    tmotorTetrix, PIDControl, encoder)
+#pragma config(Motor,  mtr_S1_C2_1,     rightMotor,     tmotorTetrix, PIDControl, encoder)
+#pragma config(Motor,  mtr_S1_C2_2,     leftMotor,    tmotorTetrix, PIDControl, encoder)
 #pragma config(Servo,  srvo_S1_C1_1,    servo1,               tServoStandard)
 #pragma config(Servo,  srvo_S1_C1_2,    servo2,               tServoNone)
 #pragma config(Servo,  srvo_S1_C1_3,    servo3,               tServoNone)
@@ -16,32 +16,48 @@ task main()
 {
 	bFloatDuringInactiveMotorPWM = false;
 
-	int leftRight, forwardBack;
+	int left, right;
+	bool down = false;
 
 	servo[servo1] = 135;
 	while (true)
 	{
 		getJoystickSettings(joystick);
 		//servo
-		if (joy1Btn(6) == 1) {
+		if (joy1Btn(6) == 1 && !down)
+		{
+			down = true;
+		}
+		else if (joy1Btn(5) == 1 && down)
+		{
+			down = false;
+		}
+		if (down)
+		{
 			servo[servo1] = 10;
-		} else {
+		}
+		else
+		{
 			servo[servo1] = 135;
 		}
 		//motors
-		leftRight = joystick.joy1_x2 * 80/128;
-		forwardBack = -joystick.joy1_y1 * 80/128;
-		if (abs(forwardBack) > 15 || abs(leftRight) > 15)
+		left = -joystick.joy1_y1 * 80/128;
+		right = -joystick.joy1_y2 * 80/128;
+		if (abs(left) > 15)
 		{
-			motor[leftMotor] = -(forwardBack+leftRight);
-			motor[rightMotor] = -(forwardBack-leftRight);
+			motor[leftMotor] = left;
 		}
 		else
 		{
 			motor[leftMotor] = 0;
+		}
+		if (abs(right) > 15)
+		{
+			motor[rightMotor] = right;
+		}
+		else
+		{
 			motor[rightMotor] = 0;
 		}
-		motor[leftMotor] = -motor[leftMotor];
-		motor[rightMotor] = -motor[rightMotor];
 	}
 }
