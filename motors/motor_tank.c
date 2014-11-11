@@ -12,7 +12,8 @@
 
 #include "JoystickDriver.c"
 
-task main()
+task main(
+)
 {
 	bFloatDuringInactiveMotorPWM = false;
 
