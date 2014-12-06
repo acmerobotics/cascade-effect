@@ -1,5 +1,5 @@
 #pragma config(Hubs,  S1, HTServo,  HTMotor,  none,     none)
-#pragma config(Sensor, S1,     ,               sensorI2CMuxController)
+#pragma config(Sensor, S4,     ,               sensorTouch)
 #pragma config(Motor,  mtr_S1_C2_1,     leftMotor,     tmotorTetrix, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C2_2,     rightMotor,    tmotorTetrix, PIDControl, encoder)
 #pragma config(Servo,  srvo_S1_C1_1,    servo1,               tServoStandard)
@@ -24,17 +24,14 @@ task main()
 	{
 		getJoystickSettings(joystick);
 		//servo
-		if (joy1Btn(6) == 1 && !down)
-		{
+		if (!down && SensorValue[S4] == 1) {
 			down = true;
-		}
-		else if (joy1Btn(5) == 1 && down)
-		{
+		} else if (joy1Btn(6) == 1) {
 			down = false;
 		}
 		if (down)
 		{
-			servo[servo1] = 10;
+			servo[servo1] = 17;
 		}
 		else
 		{

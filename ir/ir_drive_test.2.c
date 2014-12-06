@@ -24,10 +24,10 @@ task main()
 		strength = irSeeker.enhStrength;
 		nxtDisplayBigTextLine(1, "%d", direction);
 		nxtDisplayBigTextLine(3, "%d", strength);
-		if (direction > 6) {
+		if (direction > 3) {
 			motor[leftMotor] = 40;
 			motor[rightMotor] = -40;
-		} else if (direction < 4) {
+		} else if (direction < 1) {
 			motor[leftMotor] = -40;
 			motor[rightMotor] = 40;
 		} else if (strength < 200) {
