@@ -1,5 +1,5 @@
 #pragma config(Hubs,  S1, HTServo,  HTMotor,  none,     none)
-#pragma config(Sensor, S4,     ,               sensorTouch)
+#pragma config(Sensor, S4,     sonarSensor,    sensorSONAR)
 #pragma config(Motor,  mtr_S1_C2_1,     leftMotor,     tmotorTetrix, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C2_2,     rightMotor,    tmotorTetrix, PIDControl, encoder)
 #pragma config(Servo,  srvo_S1_C1_1,    servo1,               tServoStandard)
@@ -112,6 +112,10 @@ task main()
   int leftRight, forwardBack;
 	bool down = false;
 
+	int targetLeft, targetRight, currentLeft, currentRight;
+
+	int i = 0;
+
   while (true)
   {
 	  ///////////////////////////////////////////////////////////
@@ -130,16 +134,14 @@ task main()
 
   	getJoystickSettings(joystick);
 		//servo
-		if (!down && SensorValue[S4] == 1) {
-			down = true;
-		} else if (joy1Btn(6) == 1) {
+		if (joy1Btn(6) == 1) {
 			down = false;
 		} else if (joy1Btn(5) == 1) {
 			down = true;
 		}
 		if (down)
 		{
-			servo[servo1] = 135;
+			servo[servo1] = 128;
 		}
 		else
 		{
@@ -152,27 +154,61 @@ task main()
 		{
 			if (leftRight > 0)
 			{
-				setDriveMotors(80, -80);
+				targetLeft = 20;
+				targetRight = -20;
 			}
 			else
 			{
-				setDriveMotors(-80, 80);
+				targetLeft = -20;
+				targetRight = 20;
 			}
 		}
 		else if (abs(forwardBack) > 15)
 		{
 			if (forwardBack > 0)
 			{
-				setDriveMotors(80, 80);
+				targetRight = 80;
+				targetLeft = 80;
 			}
 			else
 			{
-				setDriveMotors(-80, -80);
+				targetRight = -80;
+				targetLeft = -80;
 			}
 		}
 		else
 		{
-			stopDriveMotors();
+			//currentLeft = 0;
+			//currentRight = 0;
+			targetLeft = 0;
+			targetRight = 0;
 		}
+		if (i % 3 == 0)
+		{
+			if (currentLeft != targetLeft)
+			{
+				if (currentLeft > targetLeft)
+				{
+					currentLeft--;
+				}
+				else
+				{
+					currentLeft++;
+				}
+			}
+			if (currentRight != targetRight)
+			{
+				if (currentRight > targetRight)
+				{
+					currentRight--;
+				}
+				else
+				{
+					currentRight++;
+				}
+			}
+		}
+		i++;
+		setDriveMotors(currentLeft, currentRight);
   }
 }

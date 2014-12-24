@@ -1,5 +1,5 @@
 #pragma config(Hubs,  S1, HTServo,  HTMotor,  none,     none)
-#pragma config(Sensor, S4,     ,               sensorTouch)
+#pragma config(Sensor, S4,     sonarSensor,    sensorSONAR)
 #pragma config(Motor,  mtr_S1_C2_1,     leftMotor,     tmotorTetrix, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C2_2,     rightMotor,    tmotorTetrix, PIDControl, encoder)
 #pragma config(Servo,  srvo_S1_C1_1,    servo1,               tServoStandard)
@@ -56,7 +56,7 @@ void initializeRobot()
   // Place code here to sinitialize servos to starting positions.
   // Sensors are automatically configured and setup by ROBOTC. They may need a brief time to stabilize.
 	servo[servo1] = 255;
-  playSoundFile("Roadrunner.rso");
+  //playSoundFile("Roadrunner.rso");
   initSensor(&irSeeker, S3);
   return;
 }
@@ -153,7 +153,7 @@ task main()
 {
   initializeRobot();
 
-  //waitForStart(); // Wait for the beginning of autonomous phase.
+  waitForStart(); // Wait for the beginning of autonomous phase.
 
   ///////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////
@@ -164,7 +164,7 @@ task main()
   ///////////////////////////////////////////////////////////
 
   setDriveMotors(-80);
-  wait1Msec(1000);
+  wait1Msec(1250);
   stopDriveMotors();
 
   while (true)
