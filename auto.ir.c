@@ -89,34 +89,18 @@ void setDriveMotors(int target)
 	}
 }
 
-void turnRight(float degrees)
+void turnLeft(float degrees)
 {
-	if (degrees > 0)
+	int i = 0;
+	while (degrees > 0)
 	{
-		int i = 0;
-		while (degrees > 0)
-		{
-			degrees -= ((float) (SensorValue(GyroSensor)-offset)) * 0.002;
-			float motorSpeed = sin(((float) i) * 0.02)/2.0 + 1.0/2.0;
-			motor[leftMotor] = round(motorSpeed * 5);
-			motor[rightMotor] = -round(motorSpeed * 5);
-			i++;
-			wait1Msec(2);
-		}
-	}
-	else
-	{
-		int i = 0;
-		while (degrees < 0)
-		{
-			nxtDisplayBigTextLine(1, "%d", SensorValue(GyroSensor));
-			degrees -= ((float) (SensorValue(GyroSensor)-offset)) * 0.002;
-			float motorSpeed = sin(((float) i) * 0.02)/2.0 + 1.0/2.0;
-			motor[leftMotor] = -round(motorSpeed * 5);
-			motor[rightMotor] = round(motorSpeed * 5);
-			i++;
-			wait1Msec(2);
-		}
+		nxtDisplayBigTextLine(1, "%d", degrees);
+		degrees -= ((float) (SensorValue(GyroSensor)-offset)) * 0.002;
+		float motorSpeed = sin(((float) i) * 0.02)/2.0 + 1.0/2.0;
+		motor[leftMotor] = -round(motorSpeed * 5);
+		motor[rightMotor] = round(motorSpeed * 5);
+		i++;
+		wait1Msec(2);
 	}
 	stopDriveMotors();
 }
@@ -164,22 +148,36 @@ task main()
   ///////////////////////////////////////////////////////////
 
 	setDriveMotors(-80);
-	while ((((float) SensorValue(sonarSensor)) / 2.54) < 100) {
+	while ((((float) SensorValue(sonarSensor)) / 2.54) < 52) {
 		nxtDisplayTextLine(2, "%d", ((float) SensorValue(sonarSensor)) / 2.54);
 	}
 	stopDriveMotors();
 
 	readSensor(&irSeeker);
 	int irReading = irSeeker.acDirection;
-	nxtDisplayTextLine(2, "%d", irReading);
+	nxtDisplayTextLine(0, "%d %d", irReading, SensorValue(sonarSensor));
 
-	if (irReading == 5)
+	/* IR Codes
+	3 - parallel to IR sensor
+	6 - perpendicular to IR sensor
+	5 - 45 degree angle to IR sensor
+	*/
+
+	if (irReading == 3)
 	{
-		turnRight(-90);
-		setDriveMotors(-80);
-		wait1Msec(500);
-		stopDriveMotors();
+		// do nothing
 	}
+	else if (irReading == 6 || irReading == 5)
+	{
+		turnLeft(50);
+	}
+	else if (irReading == 2)
+	{
+		turnLeft(30);
+	}
+	setDriveMotors(-80);
+	wait1Msec(500);
+	stopDriveMotors();
 
 	while (true) { }
 
