@@ -15,8 +15,9 @@ task MotorRegulation()
 	while (true)
 	{
 		reading += ((float) SensorValue(GyroSensor)-offset) * 0.01;
-		k_l = (90.0 + reading) / 90.0;
-		k_r = (90.0 - reading) / 90.0;
+		nxtDisplayBigTextLine(1, "%f", reading);
+		k_l = (25.0 + reading) / 25.0;
+		k_r = (25.0 - reading) / 25.0;
 		motor[leftMotor] = k_l * s_l;
 		motor[rightMotor] = k_r * s_r;
 		wait1Msec(10);
@@ -32,7 +33,7 @@ void setDriveMotors(int speed)
 task main()
 {
 	StartTask(MotorRegulation);
-	setDriveMotors(-80);
-	wait1Msec(1000);
+	setDriveMotors(-20);
+	wait1Msec(5000);
 	setDriveMotors(0);
 }
