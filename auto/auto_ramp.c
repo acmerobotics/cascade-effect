@@ -21,8 +21,8 @@ tHTIRS2 irSeeker;
 
 const int gyroOffset = SensorValue(gyro);
 
-#define SERVO_UP 225
-#define SERVO_DOWN 110
+#define SERVO_UP 173
+#define SERVO_DOWN 115
 
 int targetRight = 0,
 		actualRight = 0,

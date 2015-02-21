@@ -142,7 +142,33 @@ task main()
 	waitForStart();
 
 	setDriveMotors(80, 80);
-	wait1Msec(1500);
+	wait1Msec(1300);
+	stopDriveMotors();
+	turnLeft(90);
+	setDriveMotors(20, 20);
+	while (readSonar() < 40) {}
+	stopDriveMotors();
+	nxtDisplayTextLine(0, "%d", readSonar());
+	int irReading = readIR();
+	if (irReading == 6 || irReading == 5)
+	{
+		turnLeft(90);
+		setDriveMotors(20, 20);
+		while (readIR() < 9 && readIR() != 0) { }
+		wait1Msec(100);
+		stopDriveMotors();
+		turnRight(90);
+		irReading = readIR();
+	}
+	// else
+	// {
+	//   do nothing
+	// }
+
+	nxtDisplayTextLine(1, "%d", irReading);
+
+	setDriveMotors(80, 80);
+	wait1Msec(3000);
 	stopDriveMotors();
 	while (true) { }
 }

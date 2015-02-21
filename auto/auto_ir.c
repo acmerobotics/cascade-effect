@@ -21,8 +21,8 @@ tHTIRS2 irSeeker;
 
 const int gyroOffset = SensorValue(gyro);
 
-#define SERVO_UP 225
-#define SERVO_DOWN 110
+#define SERVO_UP 173
+#define SERVO_DOWN 115
 
 int targetRight = 0,
 		actualRight = 0,
@@ -46,6 +46,14 @@ void setDriveMotors(int left, int right)
 	targetRight = right;
 }
 
+void setDriveMotorsDirect(int left, int right)
+{
+	targetLeft = left;
+	actualLeft = left;
+	targetRight = right;
+	actualRight = right;
+}
+
 void stopDriveMotors()
 {
 	targetLeft = 0;
@@ -56,7 +64,7 @@ void stopDriveMotors()
 
 float readGyro()
 {
-	return ((float) (SensorValue(gyro) - gyroOffset));
+	return -((float) (SensorValue(gyro) - gyroOffset));
 }
 
 int readIR()
@@ -68,7 +76,7 @@ int readIR()
 int readSonar()
 {
 	int reading = SensorValue(sonar);
-	return floor(((float) reading) / 2.54);
+	return reading;
 }
 
 void turnLeft(float degrees)
@@ -76,6 +84,7 @@ void turnLeft(float degrees)
 	setDriveMotors(-20, 20);
 	while (degrees > 0)
 	{
+		nxtDisplayTextLine(1, "%d", degrees);
 		degrees -= 0.001 * readGyro();
 		wait1Msec(1);
 	}
@@ -134,6 +143,8 @@ task motorManagement()
 
 task main()
 {
+	bDisplayDiagnostics = false;
+
 	startTask(motorManagement);
 
 	init();
@@ -141,33 +152,33 @@ task main()
 	waitForStart();
 
 	setDriveMotors(80, 80);
-	wait1Msec(1300);
+
+	//if the sonar sensor is operational, it is preferable to use it instead of a delay
+	//while (readSonar() < 100) { }
+
+	wait1Msec(1000);
+
 	stopDriveMotors();
-	turnLeft(90);
-	setDriveMotors(20, 20);
-	while (readSonar() < 38) {}
-	stopDriveMotors();
-	nxtDisplayTextLine(0, "%d", readSonar());
-	int irReading = readIR();
-	if (irReading == 6 || irReading == 5)
+
+	int ir = readIR();
+
+	if (ir == 5)
 	{
-		turnLeft(90);
-		setDriveMotors(20, 20);
-		while (readIR() < 9 && readIR() != 0) { }
-		wait1Msec(100);
-		stopDriveMotors();
-		turnRight(90);
-		irReading = readIR();
+		turnLeft(40);
 	}
-	// else
-	// {
-	//   do nothing
-	// }
+	else if (ir == 6)
+	{
+		turnLeft(70);
+	}
 
-	nxtDisplayTextLine(1, "%d", irReading);
+	wait1Msec(500);
 
-	setDriveMotors(80, 80);
-	wait1Msec(1250);
+	setDriveMotorsDirect(100, 100);
+	wait1Msec(1000);
 	stopDriveMotors();
+
+	nxtDisplayTextLine(0, "%d", readIR());
+	nxtDisplayTextLine(1, "%d", readSonar());
+
 	while (true) { }
 }

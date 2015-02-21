@@ -1,4 +1,4 @@
-const tSensors GyroSensor = (tSensors) S4;
+const tSensors GyroSensor = (tSensors) S2;
 
 #define offset 598
 
@@ -10,28 +10,7 @@ task main()
 {
 	while (true)
 	{
-		gyro_value = SensorValue(GyroSensor)-offset;
-		if (abs(gyro_value) > 15)
-		{
-			if (!turning)
-			{
-				time = nSysTime;
-				turning = true;
-				degree_value = 0;
-			}
-			else
-			{
-				newTime = nSysTime;
-				degree_value += (((float) newTime - time) / 1000.0) * gyro_value;
-				displayTextLine(2, "Turned %f degrees", degree_value);
-				displayTextLine(3, "Timer: %d", newTime-time);
-				time = newTime;
-			}
-		}
-		else
-		{
-			turning = false;
-		}
+		gyro_value = SensorValue(GyroSensor) - offset;
 		displayTextLine(1, "Gyro reading: %d", gyro_value);
     //wait1Msec(2);
 	}
