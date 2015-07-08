@@ -91,7 +91,7 @@ task motorManagement()
 			motor[right1] = 0;
 			motor[right2] = 0;
 		}
-		wait1Msec(5);
+		wait1Msec(0);
 	}
 }
 
@@ -105,6 +105,8 @@ task main()
 
 	int joy1 = 0, joy2 = 0;
 
+	int i = 0;
+
 	while (true)
 	{
 		getJoystickSettings(joystick);
@@ -112,9 +114,7 @@ task main()
 		joy1 = joystick.joy1_y1 * 0.75;
 		joy2 = joystick.joy1_x2 * 0.75;
 
-		nxtDisplayTextLine(1, "%d", joy1);
-		nxtDisplayTextLine(2, "%d", joy2);
-		nxtDisplayTextLine(3, "%d", SensorValue(sonar));
+		nxtDisplayTextLine(0, "%d", i);
 
 		if (abs(joy1) > 10 && abs(joy2) > 10)
 		{
@@ -169,5 +169,7 @@ task main()
 		//{
 		//	servo[hook] = SERVO_UP;
 		//}
+
+		i++;
 	}
 }

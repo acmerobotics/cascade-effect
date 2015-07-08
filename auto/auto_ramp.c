@@ -142,7 +142,7 @@ task main()
 	waitForStart();
 
 	setDriveMotors(80, 80);
-	wait1Msec(1500);
+	wait1Msec(1700);
 	stopDriveMotors();
 	while (true) { }
 }
